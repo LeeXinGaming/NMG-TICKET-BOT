@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Ticket Bot - Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #0d0f12;
+            --bg-card: #15181e;
+            --bg-card-hover: #1c2028;
+            --bg-input: #101217;
+            --border: #262a34;
+            --border-focus: #5865f2;
+            --primary: #5865f2;
+            --primary-hover: #4752c4;
+            --success: #23a55a;
+            --warning: #f0b232;
+            --danger: #f23f43;
+            --text: #f2f3f5;
+            --text-muted: #8a8f98;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            line-height: 1.5;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--primary), #808bf7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .header-sub {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .alert-banner {
+            background: rgba(35, 165, 90, 0.15);
+            border: 1px solid var(--success);
+            color: #82e2a7;
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            margin-bottom: 25px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Metrics Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-focus);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-top: 6px;
+            color: var(--text);
+        }
+
+        .stat-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Main Dashboard Sections */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 25px;
+        }
+
+        .panel-card h2 {
+            font-size: 18px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            padding: 10px 14px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--border-focus);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            text-align: left;
+            color: var(--text-muted);
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-pill.open { background: rgba(35, 165, 90, 0.2); color: #82e2a7; }
+        .badge-pill.closed { background: rgba(242, 63, 67, 0.2); color: #faa6a8; }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <div class="logo-badge">🎫</div>
+                <div>
+                    <h1>Support Ticket System</h1>
+                    <div class="header-sub">Production Administration & Real-Time Monitoring</div>
+                </div>
+            </div>
+            <div>
+                <a href="/logout" style="color: var(--text-muted); text-decoration: none; font-size: 13px;">Logout</a>
+            </div>
+        </header>
+
+        {% if message %}
+        <div class="alert-banner">
+            <span>✅</span> {{ message }}
+        </div>
+        {% endif %}
+
+        <!-- Metric Stat Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Tickets</div>
+                <div class="stat-value">{{ stats.total }}</div>
+                <div class="stat-sub">All-time tickets opened</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Open Tickets</div>
+                <div class="stat-value" style="color: #82e2a7;">{{ stats.open }}</div>
+                <div class="stat-sub">Currently active channels</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Closed Tickets</div>
+                <div class="stat-value" style="color: #faa6a8;">{{ stats.closed }}</div>
+                <div class="stat-sub">Resolved tickets</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Tickets Today</div>
+                <div class="stat-value">{{ stats.today }}</div>
+                <div class="stat-sub">Opened in past 24 hours</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">This Month</div>
+                <div class="stat-value">{{ stats.this_month }}</div>
+                <div class="stat-sub">Current calendar month</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Left Column: Settings Configuration -->
+            <div>
+                <div class="panel-card">
+                    <h2>⚙️ Core Ticket Settings</h2>
+                    <form action="/dashboard/settings" method="POST">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="support_role_id">Support Role ID</label>
+                                <input type="text" id="support_role_id" name="support_role_id" value="{{ settings.support_role_id or '' }}" placeholder="e.g. 123456789012345678">
+                            </div>
+                            <div class="form-group">
+                                <label for="ticket_category_id">Discord Category ID</label>
+                                <input type="text" id="ticket_category_id" name="ticket_category_id" value="{{ settings.ticket_category_id or '' }}" placeholder="e.g. 123456789012345678">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="log_channel_id">Log Channel ID</label>
+                                <input type="text" id="log_channel_id" name="log_channel_id" value="{{ settings.log_channel_id or '' }}" placeholder="e.g. 123456789012345678">
+                            </div>
+                            <div class="form-group">
+                                <label for="transcript_channel_id">Transcript Channel ID</label>
+                                <input type="text" id="transcript_channel_id" name="transcript_channel_id" value="{{ settings.transcript_channel_id or '' }}" placeholder="e.g. 123456789012345678">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="max_tickets">Max Open Tickets Per User</label>
+                                <input type="number" id="max_tickets" name="max_tickets" value="{{ settings.max_tickets or 1 }}" min="1" max="10">
+                            </div>
+                            <div class="form-group">
+                                <label for="ticket_name_format">Channel Name Format</label>
+                                <input type="text" id="ticket_name_format" name="ticket_name_format" value="{{ settings.ticket_name_format or 'ticket-{id:06d}' }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="autoreply_enabled">Enable Automated Greetings</label>
+                            <select id="autoreply_enabled" name="autoreply_enabled">
+                                <option value="1" {% if settings.autoreply_enabled %}selected{% endif %}>Enabled (Yes)</option>
+                                <option value="0" {% if not settings.autoreply_enabled %}selected{% endif %}>Disabled (No)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn">💾 Save System Settings</button>
+                    </form>
+                </div>
+
+                <div class="panel-card">
+                    <h2>🏆 Top Support Staff</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Staff Name</th>
+                                <th>Staff ID</th>
+                                <th>Tickets Handled</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for staff in top_staff %}
+                            <tr>
+                                <td><strong>{{ staff.staff_name }}</strong></td>
+                                <td><code>{{ staff.staff_id }}</code></td>
+                                <td><span class="badge-pill open">{{ staff.claim_count }} claims</span></td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">No staff claims recorded yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Column: Auto Replies & Keywords -->
+            <div>
+                <div class="panel-card">
+                    <h2>💬 Category Auto-Replies</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Preview Message</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reply in auto_replies %}
+                            <tr>
+                                <td><strong>{{ reply.category_name }}</strong></td>
+                                <td>
+                                    {% if reply.enabled %}
+                                    <span class="badge-pill open">Active</span>
+                                    {% else %}
+                                    <span class="badge-pill closed">Off</span>
+                                    {% endif %}
+                                </td>
+                                <td style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-muted);">
+                                    {{ reply.message }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="panel-card">
+                    <h2>🔑 Keyword Triggers</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Trigger Word</th>
+                                <th>Bot Response</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for kw in keywords %}
+                            <tr>
+                                <td><code>{{ kw.keyword }}</code></td>
+                                <td style="color: var(--text-muted);">{{ kw.response }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="2" style="text-align: center; color: var(--text-muted); padding: 20px;">No keywords registered.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            Support Ticket Bot &bull; Production Ready &bull; Powered by FastAPI & Discord.py
+        </footer>
+    </div>
+</body>
+</html>
